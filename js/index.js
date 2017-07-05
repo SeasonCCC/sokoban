@@ -20,7 +20,7 @@ var Sokoban = (function(root){
 					{x:2,y:4},
 					{x:4,y:5}
 				],
-				perPos: {x:5,y:6}
+				perPos: {x:5,y:5}
 				
 			}
 		]
@@ -60,6 +60,7 @@ var Sokoban = (function(root){
 				li.setAttribute("class", className);
 				ul.appendChild(li);
 			};
+			this.map = __DEFAULT__.mission[0].map;
 
 
 			// 生成箱子
@@ -70,27 +71,30 @@ var Sokoban = (function(root){
 				box.style.top = __DEFAULT__.mission[0].boxPos[i].y * 50 +"px";
 				ul.appendChild(box);
 			};
+			this.box = __DEFAULT__.mission[0].boxPos;
 
 
 			// 生成人物
 			var person = document.createElement("div");
 			person.className = "person";
-			person.style.left = __DEFAULT__.mission[0].perPos.x * 50 +"px";
-			person.style.top = __DEFAULT__.mission[0].perPos.y * 50 +"px";
+			person.style.left = (__DEFAULT__.mission[0].perPos.x-1) * 50 +"px";
+			person.style.top = (__DEFAULT__.mission[0].perPos.y-1) * 50 +"px";
 			ul.appendChild(person);
-			this.person = {x: __DEFAULT__.mission[0].perPos.x, y: __DEFAULT__.mission[0].perPos.y};
+			this.person = {x: __DEFAULT__.mission[0].perPos.x, y: __DEFAULT__.mission[0].perPos.y, element: person};
 
 
 			el.appendChild(ul);
 		},
 
 		bindKey: function(){
+			var that = this;
 			onkeyup = function(ev){
 				var oEvent = ev || event;
-				console.log(oEvent.keyCode);
+				// console.log(that);
 				switch (oEvent.keyCode){
 					case 38: 
-						var className = "tree";
+						that.personMove("up");
+						// var className = "tree";
 						break;
 
 					case 40: 
@@ -106,6 +110,11 @@ var Sokoban = (function(root){
 						break;
 				}			
 			}
+		},
+
+		personMove: function(direction){
+			console.log((this.person.y - 2)*50 +"px");
+			this.person.element.style.top = (this.person.y - 2)*50 +"px";
 		}
 
 	}
