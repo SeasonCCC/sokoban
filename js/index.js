@@ -15,12 +15,12 @@ var Sokoban = (function(root){
 					0,0,1,1,1,1,1,0
 				],
 				boxPos: [
-					{x:5,y:3},
+					{x:5,y:6},
 					{x:3,y:5},
 					{x:2,y:4},
 					{x:4,y:5}
 				],
-				perPos: {x:5,y:5}
+				perPos: {x:4,y:6}
 				
 			}
 		]
@@ -67,11 +67,17 @@ var Sokoban = (function(root){
 			for (var i = __DEFAULT__.mission[0].boxPos.length - 1; i >= 0; i--) {
 				var box = document.createElement("div");
 				box.className = "box";
-				box.style.left = __DEFAULT__.mission[0].boxPos[i].x * 50 +"px";
-				box.style.top = __DEFAULT__.mission[0].boxPos[i].y * 50 +"px";
+				box.style.left = (__DEFAULT__.mission[0].boxPos[i].x-1) * 50 +"px";
+				box.style.top = (__DEFAULT__.mission[0].boxPos[i].y-1) * 50 +"px";
 				ul.appendChild(box);
+				this.box = this.box || [];
+				this.box.push({
+					x: __DEFAULT__.mission[0].boxPos[i].x,
+					y: __DEFAULT__.mission[0].boxPos[i].y,
+					boxElement: box
+				});
 			};
-			this.box = __DEFAULT__.mission[0].boxPos;
+			
 
 
 			// 生成人物
@@ -80,7 +86,7 @@ var Sokoban = (function(root){
 			person.style.left = (__DEFAULT__.mission[0].perPos.x-1) * 50 +"px";
 			person.style.top = (__DEFAULT__.mission[0].perPos.y-1) * 50 +"px";
 			ul.appendChild(person);
-			this.person = {x: __DEFAULT__.mission[0].perPos.x, y: __DEFAULT__.mission[0].perPos.y, element: person};
+			this.person = {x: __DEFAULT__.mission[0].perPos.x, y: __DEFAULT__.mission[0].perPos.y, personElement: person};
 
 
 			el.appendChild(ul);
@@ -94,27 +100,70 @@ var Sokoban = (function(root){
 				switch (oEvent.keyCode){
 					case 38: 
 						that.personMove("up");
-						// var className = "tree";
 						break;
 
 					case 40: 
-						var className = "wall";
+						that.personMove("down");
 						break;
 
 					case 37: 
-						var className = "allow";
+						that.personMove("left");
 						break;
 
 					case 39: 
-						var className = "target";
+						that.personMove("right");
 						break;
 				}			
 			}
 		},
 
 		personMove: function(direction){
-			console.log((this.person.y - 2)*50 +"px");
-			this.person.element.style.top = (this.person.y - 2)*50 +"px";
+			var that = this;
+			console.log(that.box);
+			switch (direction){
+				case "up": 
+					that.box.forEach(function(box){
+						if (box.y == (that.person.y-1) && box.x == that.person.x) {
+							box.boxElement.style.top = (box.y - 2)*50 +"px";
+							box.y = box.y -1;
+						}
+					})
+					this.person.personElement.style.top = (this.person.y - 2)*50 +"px";
+					this.person.y = this.person.y - 1;
+					break;
+				case "down": 
+					this.box.forEach(function(box){
+						if (box.y == (that.person.y+1) && box.x == that.person.x) {
+							box.boxElement.style.top = box.y*50 +"px";
+							box.y = box.y + 1;
+						}
+					})
+					this.person.personElement.style.top = this.person.y*50 +"px";
+					this.person.y = this.person.y + 1;
+					break;
+				case "left": 
+					this.box.forEach(function(box){
+						if (box.x == (that.person.x-1) && box.y == that.person.y) {
+							box.boxElement.style.left = (box.x-2)*50 +"px";
+							box.x = box.x - 1;
+						}
+					})
+					this.person.personElement.style.left = (this.person.x-2)*50 +"px";
+					this.person.x = this.person.x - 1;
+					break;	
+				case "right": 
+					this.box.forEach(function(box){
+						if (box.x == (that.person.x+1) && box.y == that.person.y) {
+							box.boxElement.style.left = box.x*50 +"px";
+							box.x = box.x + 1;
+						}
+					})			
+					this.person.personElement.style.left = this.person.x*50 +"px";
+					this.person.x = this.person.x + 1;
+					break;
+			}
+
+			
 		}
 
 	}
