@@ -60,7 +60,7 @@ var Sokoban = (function(root){
 				li.setAttribute("class", className);
 				ul.appendChild(li);
 			};
-			this.map = __DEFAULT__.mission[0].map;
+			this.map = {mapData: __DEFAULT__.mission[0].map, mapElement: ul};
 
 
 			// 生成箱子
@@ -119,48 +119,110 @@ var Sokoban = (function(root){
 
 		personMove: function(direction){
 			var that = this;
-			console.log(that.box);
+			// console.log(that.box);
 			switch (direction){
-				case "up": 
-					that.box.forEach(function(box){
-						if (box.y == (that.person.y-1) && box.x == that.person.x) {
-							box.boxElement.style.top = (box.y - 2)*50 +"px";
-							box.y = box.y -1;
-						}
-					})
-					this.person.personElement.style.top = (this.person.y - 2)*50 +"px";
-					this.person.y = this.person.y - 1;
+				case "up":
+					var personNextElement = that.map.mapElement.children[(that.person.y-1) * 8 - (8 - that.person.x) - 1].getAttribute("class");
+					var flag = true;
+					if(personNextElement == "allow" || personNextElement == "target"){
+						that.box.forEach(function(box){
+							if (box.y == (that.person.y-1) && box.x == that.person.x) {
+								var boxNextElement = that.map.mapElement.children[(box.y - 1) * 8 - (8 - box.x) - 1].getAttribute("class");
+								if (boxNextElement == "allow" || boxNextElement == "target") {
+									box.boxElement.style.top = (box.y - 2)*50 +"px";
+									box.y = box.y -1;
+								}else{
+									flag = false;
+								}
+							}
+						})						
+					}else{
+						flag = false;
+					}
+
+					if (flag) {
+						that.person.personElement.style.top = (that.person.y - 2)*50 +"px";
+						that.person.y = that.person.y - 1;
+					}
+					
 					break;
 				case "down": 
-					this.box.forEach(function(box){
-						if (box.y == (that.person.y+1) && box.x == that.person.x) {
-							box.boxElement.style.top = box.y*50 +"px";
-							box.y = box.y + 1;
-						}
-					})
-					this.person.personElement.style.top = this.person.y*50 +"px";
-					this.person.y = this.person.y + 1;
+					var personNextElement = that.map.mapElement.children[(that.person.y+1) * 8 - (8 - that.person.x) - 1].getAttribute("class");
+					var flag = true;
+					if(personNextElement == "allow" || personNextElement == "target"){
+						this.box.forEach(function(box){
+							if (box.y == (that.person.y+1) && box.x == that.person.x) {
+								var boxNextElement = that.map.mapElement.children[(box.y + 1) * 8 - (8 - box.x) - 1].getAttribute("class");
+								if (boxNextElement == "allow" || boxNextElement == "target") {
+									box.boxElement.style.top = box.y*50 +"px";
+									box.y = box.y + 1;
+								}else{
+									flag = false;
+								}
+							}
+						})
+					}else{
+						flag = false;
+					}
+
+					if (flag) {
+						this.person.personElement.style.top = this.person.y*50 +"px";
+						this.person.y = this.person.y + 1;
+					}
 					break;
 				case "left": 
-					this.box.forEach(function(box){
-						if (box.x == (that.person.x-1) && box.y == that.person.y) {
-							box.boxElement.style.left = (box.x-2)*50 +"px";
-							box.x = box.x - 1;
-						}
-					})
-					this.person.personElement.style.left = (this.person.x-2)*50 +"px";
-					this.person.x = this.person.x - 1;
+					var personNextElement = that.map.mapElement.children[that.person.y * 8 - (8 - that.person.x + 1) - 1].getAttribute("class");
+					var flag = true;
+					// console.log(that.person.y * 8 - (8 - that.person.x + 1) - 1);
+					if(personNextElement == "allow" || personNextElement == "target"){	
+						this.box.forEach(function(box){
+							if (box.x == (that.person.x-1) && box.y == that.person.y) {
+								var boxNextElement = that.map.mapElement.children[box.y * 8 - (8 - box.x + 1) - 1].getAttribute("class");
+								if (boxNextElement == "allow" || boxNextElement == "target") {
+									box.boxElement.style.left = (box.x-2)*50 +"px";
+									box.x = box.x - 1;
+								}else{
+									flag = false;
+								}	
+							}
+						})
+					}else{
+						flag = false;
+					}					
+
+
+					if (flag) {
+						this.person.personElement.style.left = (this.person.x-2)*50 +"px";
+						this.person.x = this.person.x - 1;
+					}
 					break;	
 				case "right": 
-					this.box.forEach(function(box){
-						if (box.x == (that.person.x+1) && box.y == that.person.y) {
-							box.boxElement.style.left = box.x*50 +"px";
-							box.x = box.x + 1;
-						}
-					})			
-					this.person.personElement.style.left = this.person.x*50 +"px";
-					this.person.x = this.person.x + 1;
+					var personNextElement = that.map.mapElement.children[that.person.y * 8 - (8 - that.person.x - 1) - 1].getAttribute("class");
+					var flag = true;
+					if(personNextElement == "allow" || personNextElement == "target"){
+						this.box.forEach(function(box){
+							if (box.x == (that.person.x+1) && box.y == that.person.y) {
+								var boxNextElement = that.map.mapElement.children[box.y * 8 - (8 - box.x - 1) - 1].getAttribute("class");
+								if (boxNextElement == "allow" || boxNextElement == "target") {
+									box.boxElement.style.left = box.x*50 +"px";
+									box.x = box.x + 1;
+								}else{
+									flag = false;
+								}
+
+							}
+						})
+					}else{
+						flag = false;
+					}
+
+					if (flag) {
+						this.person.personElement.style.left = this.person.x*50 +"px";
+						this.person.x = this.person.x + 1;
+					}
 					break;
+
+
 			}
 
 			
