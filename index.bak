@@ -119,18 +119,110 @@ var Sokoban = (function(root){
 
 		personMove: function(direction){
 			var that = this;
+			// console.log(that.box);
 			switch (direction){
 				case "up":
 					that.moveAction(0, -1);
+					// var personNextElement = that.map.mapElement.children[(that.person.y-1) * 8 - (8 - that.person.x) - 1].getAttribute("class");
+					// var flag = true;
+					// if(personNextElement == "allow" || personNextElement == "target"){
+					// 	that.box.forEach(function(box){
+					// 		if (box.y == (that.person.y-1) && box.x == that.person.x) {
+					// 			var boxNextElement = that.map.mapElement.children[(box.y - 1) * 8 - (8 - box.x) - 1].getAttribute("class");
+					// 			if (boxNextElement == "allow" || boxNextElement == "target") {
+					// 				box.boxElement.style.top = (box.y - 2)*50 +"px";
+					// 				box.y = box.y -1;
+					// 			}else{
+					// 				flag = false;
+					// 			}
+					// 		}
+					// 	})						
+					// }else{
+					// 	flag = false;
+					// }
+
+					// if (flag) {
+					// 	that.person.personElement.style.top = (that.person.y - 2)*50 +"px";
+					// 	that.person.y = that.person.y - 1;
+					// }
+					
 					break;
 				case "down": 
 					that.moveAction(0, 1);
+					// var personNextElement = that.map.mapElement.children[(that.person.y+1) * 8 - (8 - that.person.x) - 1].getAttribute("class");
+					// var flag = true;
+					// if(personNextElement == "allow" || personNextElement == "target"){
+					// 	this.box.forEach(function(box){
+					// 		if (box.y == (that.person.y+1) && box.x == that.person.x) {
+					// 			var boxNextElement = that.map.mapElement.children[(box.y + 1) * 8 - (8 - box.x) - 1].getAttribute("class");
+					// 			if (boxNextElement == "allow" || boxNextElement == "target") {
+					// 				box.boxElement.style.top = box.y*50 +"px";
+					// 				box.y = box.y + 1;
+					// 			}else{
+					// 				flag = false;
+					// 			}
+					// 		}
+					// 	})
+					// }else{
+					// 	flag = false;
+					// }
+
+					// if (flag) {
+					// 	this.person.personElement.style.top = this.person.y*50 +"px";
+					// 	this.person.y = this.person.y + 1;
+					// }
 					break;
 				case "left": 
 					that.moveAction(-1, 0);
+					// var personNextElement = that.map.mapElement.children[that.person.y * 8 - (8 - that.person.x + 1) - 1].getAttribute("class");
+					// var flag = true;
+					// if(personNextElement == "allow" || personNextElement == "target"){	
+					// 	this.box.forEach(function(box){
+					// 		if (box.x == (that.person.x-1) && box.y == that.person.y) {
+					// 			var boxNextElement = that.map.mapElement.children[box.y * 8 - (8 - box.x + 1) - 1].getAttribute("class");
+					// 			if (boxNextElement == "allow" || boxNextElement == "target") {
+					// 				box.boxElement.style.left = (box.x-2)*50 +"px";
+					// 				box.x = box.x - 1;
+					// 			}else{
+					// 				flag = false;
+					// 			}	
+					// 		}
+					// 	})
+					// }else{
+					// 	flag = false;
+					// }					
+
+
+					// if (flag) {
+					// 	this.person.personElement.style.left = (this.person.x-2)*50 +"px";
+					// 	this.person.x = this.person.x - 1;
+					// }
 					break;	
 				case "right": 
 					that.moveAction(1, 0);
+					// var personNextElement = that.map.mapElement.children[that.person.y * 8 - (8 - that.person.x - 1) - 1].getAttribute("class");
+					// var flag = true;
+					// if(personNextElement == "allow" || personNextElement == "target"){
+					// 	this.box.forEach(function(box){
+					// 		if (box.x == (that.person.x+1) && box.y == that.person.y) {
+					// 			var boxNextElement = that.map.mapElement.children[box.y * 8 - (8 - box.x - 1) - 1].getAttribute("class");
+					// 			if (boxNextElement == "allow" || boxNextElement == "target") {
+					// 				box.boxElement.style.left = box.x*50 +"px";
+					// 				box.x = box.x + 1;
+					// 			}else{
+					// 				flag = false;
+					// 			}
+
+					// 		}
+					// 	})
+					// }else{
+					// 	flag = false;
+					// }
+
+					// if (flag) {
+					// 	this.person.personElement.style.left = this.person.x*50 +"px";
+					// 	this.person.x = this.person.x + 1;
+					// }
 					break;
 			}
 		},
@@ -142,17 +234,8 @@ var Sokoban = (function(root){
 			if(personNextElement == "allow" || personNextElement == "target"){
 				that.box.forEach(function(box){
 					if (box.y == (that.person.y + y) && box.x == (that.person.x + x)) {
-
 						var boxNextElement = that.map.mapElement.children[(box.y + y) * 8 - (8 - box.x - x) - 1].getAttribute("class");
 						if (boxNextElement == "allow" || boxNextElement == "target") {
-							that.box.forEach(function(boxCheck){
-								if (boxCheck.y == (that.person.y + 2 * y) && boxCheck.x == (that.person.x + 2 * x)) {
-									flag = false;
-									x = 0;
-									y = 0;
-								}
-							});
-
 							box.boxElement.style.top = (box.y - 1 + y)*50 +"px";
 							box.boxElement.style.left = (box.x - 1 + x)*50 +"px";
 							box.y = box.y + y;
@@ -160,9 +243,8 @@ var Sokoban = (function(root){
 						}else{
 							flag = false;
 						}
-
 					}
-				});					
+				})						
 			}else{
 				flag = false;
 			}
